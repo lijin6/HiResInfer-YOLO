@@ -1,0 +1,11 @@
+# crack.yaml
+# Dataset Paths (绝对路径)
+train: /mnt/data/crack/images/train  # 2336 images
+val: /mnt/data/crack/images/val      # 406 images
+test: /mnt/data/crack/images/test    # 415 images
+
+# Image Propertie
+
+# Class Information
+nc: 1          # 单类别（裂缝检测）
+names: ['crack']  # 类别名称
