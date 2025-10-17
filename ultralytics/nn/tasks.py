@@ -11,6 +11,11 @@ import thop
 import torch
 import torch.nn as nn
 
+from .Add import *
+from .Add.MSCA import MSCAAttention
+
+
+
 from ultralytics.nn.modules import (
     AIFI,
     C1,
@@ -256,7 +261,7 @@ class BaseModel(nn.Module):
         """
         self = super()._apply(fn)
         m = self.model[-1]  # Detect()
-        if isinstance(m, Detect):  # includes all Detect subclasses like Segment, Pose, OBB, WorldDetect
+        if isinstance(m, (Detect)):  # includes all Detect subclasses like Segment, Pose, OBB, WorldDetect
             m.stride = fn(m.stride)
             m.anchors = fn(m.anchors)
             m.strides = fn(m.strides)
@@ -997,6 +1002,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             SCDown,
             C2fCIB,
             A2C2f,
+            A2C2f_DyT,
         }:
             c1, c2 = ch[f], args[0]
             if c2 != nc:  # if c2 not equal to number of classes (i.e. for Classify() output)
@@ -1024,6 +1030,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 C2fCIB,
                 C2PSA,
                 A2C2f,
+                A2C2f_DyT
             }:
                 args.insert(2, n)  # number of repeats
                 n = 1
@@ -1038,6 +1045,14 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                     args.append(1.5)
         elif m is AIFI:
             args = [ch[f], *args]
+
+
+        # =========MSCA====================
+
+        elif m is MSCAAttention:
+            c2 = ch[f]
+            args = [c2, *args]
+
         elif m in {HGStem, HGBlock}:
             c1, cm, c2 = ch[f], args[0], args[1]
             args = [c1, cm, c2, *args[2:]]
