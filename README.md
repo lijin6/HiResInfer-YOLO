@@ -47,19 +47,14 @@ Dependencies mainly include:
 ### Training
 
 ```bash
-python train.py --data data/ --epochs 50 --img-size 640 --batch-size 8
+python train.py
 ```
 
 ### Detection / Inference
 
 ```bash
-python detect.py --weights yolov12_modified.pt --source data/images/ --output results/
+python detect.py
 ```
-
-* `--weights` : Trained model weights
-* `--source`  : Image or folder to detect
-* `--output`  : Path to save results
-
 ---
 
 ## Citation
